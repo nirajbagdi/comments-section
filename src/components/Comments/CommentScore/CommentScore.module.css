@@ -1,0 +1,41 @@
+.commentScore {
+    display: flex;
+    gap: 1.2rem;
+    flex-direction: column;
+
+    background-color: var(--veryLightGray);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 2rem;
+
+    padding: 1.2rem;
+    width: 4.8rem;
+
+    grid-row: 1/-1;
+    align-self: flex-start;
+}
+
+.commentScore button {
+    background: transparent;
+    color: var(--lightGrayishBlue);
+    transition: color 0.5s ease-in-out;
+}
+
+.commentScore button:hover,
+.commentScore button:active {
+    color: var(--moderateBlue);
+}
+
+.commentScore span {
+    color: var(--moderateBlue);
+    font-weight: 500;
+}
+
+@media (max-width: 800px) {
+    .commentScore {
+        grid-row: 3;
+        flex-direction: row;
+        width: auto;
+        gap: 1.8rem;
+    }
+}

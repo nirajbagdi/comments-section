@@ -1,0 +1,16 @@
+.commentContent {
+    line-height: 1.6;
+    grid-column: 2/-1;
+}
+
+.replyingTo {
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--moderateBlue);
+}
+
+@media (max-width: 800px) {
+    .commentContent {
+        grid-column: 1/-1;
+    }
+}

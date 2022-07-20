@@ -1,3 +1,4 @@
+import CommentReplyForm from 'components/Comments/CommentReplyForm';
 import CommentHeader from 'components/Comments/CommentHeader';
 import CommentScore from 'components/Comments/CommentScore';
 import CommentContent from 'components/Comments/CommentContent';
@@ -18,6 +19,7 @@ const CommentItem: React.FC<Props> = props => {
     const commentsCtx = useComments();
 
     const isCurrentUser = props.comment.user.username === commentsCtx.currentUser;
+    const isReplying = props.comment.id === commentsCtx.commentReplyId;
 
     return (
         <>
@@ -35,6 +37,7 @@ const CommentItem: React.FC<Props> = props => {
                         variant="outline-primary"
                         label="Reply"
                         iconElement={<IconReply />}
+                        onClick={() => commentsCtx.setCommentReplyId(props.comment.id)}
                     />
                 </div>
 
@@ -43,6 +46,8 @@ const CommentItem: React.FC<Props> = props => {
                     replyingTo={props.comment.replyingTo || ''}
                 />
             </div>
+
+            {isReplying && <CommentReplyForm />}
 
             {props.comment.replies?.map(commentReply => (
                 <div className={styles.commentReply} key={commentReply.id}>

@@ -1,6 +1,8 @@
 import { createContext, useContext, useReducer } from 'react';
+
+import { CommentReply } from 'models';
 import { initialState } from './state';
-import reducer from './reducer';
+import { reducer, ReducerActions } from './reducer';
 
 type Props = { children: React.ReactNode };
 
@@ -10,9 +12,18 @@ export const useComments = () => useContext(CommentsContext);
 export const CommentsProvider: React.FC<Props> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const setCommentReplyId = (commentId: number | null) => {
+        dispatch({ type: ReducerActions.SET_COMMENT_REPLY_ID, payload: commentId });
+    };
+
+    const replyComment = (commentReplyObj: CommentReply) => {
+        dispatch({ type: ReducerActions.REPLY_COMMENT, payload: commentReplyObj });
+    };
+
     const contextValue = {
-        comments: state.comments,
-        currentUser: state.currentUser
+        ...state,
+        setCommentReplyId,
+        replyComment
     };
 
     return (

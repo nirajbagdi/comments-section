@@ -2,11 +2,7 @@ import CommentReplyForm from 'components/Comments/CommentReplyForm';
 import CommentHeader from 'components/Comments/CommentHeader';
 import CommentScore from 'components/Comments/CommentScore';
 import CommentContent from 'components/Comments/CommentContent';
-import Button from 'components/UI/Button';
-
-import { ReactComponent as IconReply } from 'assets/icon-reply.svg';
-import { ReactComponent as IconDelete } from 'assets/icon-delete.svg';
-import { ReactComponent as IconEdit } from 'assets/icon-edit.svg';
+import CommentActions from 'components/Comments/CommentActions';
 
 import { useComments } from 'context';
 import { Comment, CommentReply } from 'models';
@@ -23,26 +19,9 @@ const CommentItem: React.FC<Props> = props => {
     const isCurrentUser = props.comment.user.username === commentsCtx.currentUser;
     const isReplying = props.comment.id === commentsCtx.commentReplyId;
 
-    const globalUserActions = (
-        <Button
-            variant="outline-primary"
-            label="Reply"
-            iconElement={<IconReply />}
-            onClick={() => commentsCtx.setCommentReplyId(props.comment.id)}
-        />
-    );
-
-    const currentUserActions = (
-        <>
-            <Button
-                variant="outline-danger"
-                label="Delete"
-                iconElement={<IconDelete />}
-            />
-
-            <Button variant="outline-primary" label="Edit" iconElement={<IconEdit />} />
-        </>
-    );
+    const handleCommentReply = () => commentsCtx.setCommentReplyId(props.comment.id);
+    const handleCommentEdit = () => {};
+    const handleCommentDelete = () => {};
 
     return (
         <>
@@ -55,9 +34,12 @@ const CommentItem: React.FC<Props> = props => {
                     isCurrentUser={isCurrentUser}
                 />
 
-                <div className={styles.commentActions}>
-                    {isCurrentUser ? currentUserActions : globalUserActions}
-                </div>
+                <CommentActions
+                    isCurrentUser={isCurrentUser}
+                    onCommentDelete={handleCommentDelete}
+                    onCommentEdit={handleCommentEdit}
+                    onCommentReply={handleCommentReply}
+                />
 
                 <CommentContent
                     content={props.comment.content}

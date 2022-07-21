@@ -1,0 +1,11 @@
+.commentActions {
+    margin-left: auto;
+    display: flex;
+    gap: 2.4rem;
+}
+
+@media (max-width: 800px) {
+    .commentActions {
+        grid-row: 3;
+    }
+}

@@ -16,14 +16,24 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         dispatch({ type: ReducerActions.SET_COMMENT_REPLY_ID, payload: commentId });
     };
 
+    const setCommentEditId = (commentId: number | null) => {
+        dispatch({ type: ReducerActions.SET_COMMENT_EDIT_ID, payload: commentId });
+    };
+
     const replyComment = (commentReplyObj: CommentReply) => {
         dispatch({ type: ReducerActions.REPLY_COMMENT, payload: commentReplyObj });
+    };
+
+    const editComment = (editedText: string) => {
+        dispatch({ type: ReducerActions.EDIT_COMMENT, payload: editedText });
     };
 
     const contextValue = {
         ...state,
         setCommentReplyId,
-        replyComment
+        setCommentEditId,
+        replyComment,
+        editComment
     };
 
     return (

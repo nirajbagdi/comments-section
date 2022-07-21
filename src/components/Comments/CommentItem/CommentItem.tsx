@@ -1,4 +1,5 @@
 import CommentReplyForm from 'components/Comments/CommentReplyForm';
+import CommentEditForm from 'components/Comments/CommentEditForm';
 import CommentHeader from 'components/Comments/CommentHeader';
 import CommentScore from 'components/Comments/CommentScore';
 import CommentContent from 'components/Comments/CommentContent';
@@ -18,9 +19,10 @@ const CommentItem: React.FC<Props> = props => {
 
     const isCurrentUser = props.comment.user.username === commentsCtx.currentUser;
     const isReplying = props.comment.id === commentsCtx.commentReplyId;
+    const isEditing = props.comment.id === commentsCtx.commentEditId;
 
     const handleCommentReply = () => commentsCtx.setCommentReplyId(props.comment.id);
-    const handleCommentEdit = () => {};
+    const handleCommentEdit = () => commentsCtx.setCommentEditId(props.comment.id);
     const handleCommentDelete = () => {};
 
     return (
@@ -41,10 +43,14 @@ const CommentItem: React.FC<Props> = props => {
                     onCommentReply={handleCommentReply}
                 />
 
-                <CommentContent
-                    content={props.comment.content}
-                    replyingTo={props.comment.replyingTo || ''}
-                />
+                {!isEditing && (
+                    <CommentContent
+                        content={props.comment.content}
+                        replyingTo={props.comment.replyingTo || ''}
+                    />
+                )}
+
+                {isEditing && <CommentEditForm defaultValue={props.comment.content} />}
             </div>
 
             {isReplying && <CommentReplyForm />}

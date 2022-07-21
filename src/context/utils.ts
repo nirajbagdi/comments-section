@@ -37,3 +37,38 @@ export const updateRepliedComments = (
 
     return updatedComments as Comment[] | CommentReply[];
 };
+
+export const updateCommentContent = (
+    editId: number,
+    editedText: string,
+    comments: Comment[] | CommentReply[]
+) => {
+    const updatedComments = comments.map(comment => {
+        const hasReplies = comment.replies?.some(r => r.id === editId);
+        const hasDeepReplies = comment.replies?.some(r => r.replies?.length !== 0);
+
+        if (comment.id === editId) return { ...comment, content: editedText };
+
+        if (hasReplies) {
+            const updatedReplies = comment.replies!.map(reply => {
+                return reply.id === editId ? { ...reply, content: editedText } : reply;
+            });
+
+            return { ...comment, replies: updatedReplies };
+        }
+
+        if (hasDeepReplies) {
+            const updatedDeepReplies = updateCommentContent(
+                editId,
+                editedText,
+                comment.replies || []
+            ) as CommentReply[];
+
+            return { ...comment, replies: updatedDeepReplies };
+        }
+
+        return comment;
+    });
+
+    return updatedComments as Comment[] | CommentReply[];
+};

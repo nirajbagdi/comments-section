@@ -2,7 +2,7 @@ import { Comment, CommentReply } from 'models';
 import commentsData from 'data/commentsData.json';
 
 export type ContextState = {
-    comments: Comment[];
+    comments: Comment[] | CommentReply[];
     currentUser: string;
     commentReplyId: number | null;
     setCommentReplyId: (id: number | null) => void;

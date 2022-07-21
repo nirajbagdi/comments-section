@@ -4,13 +4,12 @@ import Input from 'components/UI/Input';
 import Button from 'components/UI/Button';
 
 import { useComments } from 'context';
+import { deepFindCommentReplies } from 'utils';
 import { CommentReply } from 'models';
 
 import styles from './CommentReplyForm.module.css';
 
-type Props = {};
-
-const CommentReplyForm: React.FC<Props> = props => {
+const CommentReplyForm = () => {
     const replyInputRef = useRef<HTMLTextAreaElement>(null);
     const commentsCtx = useComments();
 
@@ -18,21 +17,19 @@ const CommentReplyForm: React.FC<Props> = props => {
 
     const handleFormSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        if (replyInputRef.current!.value === '') return;
 
-        const commentsWithReplies = [
-            ...commentsCtx.comments,
-            ...commentsCtx.comments.map(c => c.replies).flat()
-        ];
+        const replyContent = replyInputRef.current!.value;
+        if (!replyContent.trim().length) return;
 
-        const replyingToUser = commentsWithReplies.find(
-            c => c.id === commentsCtx.commentReplyId
+        const replyingToComment = deepFindCommentReplies(
+            commentsCtx.commentReplyId as number,
+            commentsCtx.comments
         );
 
         const commentReply = new CommentReply(
             commentsCtx.currentUser,
-            replyingToUser?.user.username || '',
-            replyInputRef.current!.value
+            replyingToComment.user.username,
+            replyContent
         );
 
         commentsCtx.replyComment(commentReply);

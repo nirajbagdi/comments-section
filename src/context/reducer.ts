@@ -1,5 +1,6 @@
 import { ContextState } from './state';
-import { Comment, CommentReply } from 'models';
+import { updateRepliedComments } from './utils';
+import { CommentReply } from 'models';
 
 export enum ReducerActions {
     SET_COMMENT_REPLY_ID = 'SET_COMMENT_REPLY_ID',
@@ -22,28 +23,11 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
             return { ...state, commentReplyId: action.payload };
 
         case ReducerActions.REPLY_COMMENT:
-            const updatedComments = state.comments.map(comment => {
-                if (comment.id === state.commentReplyId) {
-                    return { ...comment, replies: [action.payload, ...comment.replies] };
-                }
-
-                if (comment.replies?.some(r => r.id === state.commentReplyId)) {
-                    const updatedReplies = comment.replies.map(reply => {
-                        if (reply.id === state.commentReplyId) {
-                            return {
-                                ...reply,
-                                replies: [action.payload, ...(reply?.replies || [])]
-                            };
-                        }
-
-                        return reply;
-                    });
-
-                    return { ...comment, replies: updatedReplies };
-                }
-
-                return comment;
-            });
+            const updatedComments = updateRepliedComments(
+                state.commentReplyId as number,
+                action.payload,
+                state.comments
+            );
 
             return { ...state, comments: updatedComments };
 

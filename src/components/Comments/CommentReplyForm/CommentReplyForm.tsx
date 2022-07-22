@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import Input from 'components/UI/Input';
 import Button from 'components/UI/Button';
@@ -18,6 +18,8 @@ const CommentReplyForm = () => {
     const handleFormSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
+        console.log(replyInputRef);
+
         const replyContent = replyInputRef.current!.value;
         if (!replyContent.trim().length) return;
 
@@ -35,6 +37,10 @@ const CommentReplyForm = () => {
         commentsCtx.replyComment(commentReply);
         commentsCtx.setCommentReplyId(null);
     };
+
+    useEffect(() => {
+        replyInputRef.current!.focus();
+    }, []);
 
     return (
         <form className={styles.replyForm} onSubmit={handleFormSubmit}>

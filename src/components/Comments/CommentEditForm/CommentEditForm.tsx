@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 import Input from 'components/UI/Input';
 import Button from 'components/UI/Button';
@@ -22,6 +22,10 @@ const CommentEditForm: React.FC<Props> = props => {
         commentsCtx.editComment(editedText);
         commentsCtx.setCommentEditId(null);
     };
+
+    useEffect(() => {
+        editInputRef.current!.focus();
+    }, []);
 
     return (
         <form className={styles.editForm} onSubmit={handleFormSubmit}>

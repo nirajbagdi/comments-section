@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from 'react';
 
-import { CommentReply } from 'models';
+import { Comment, CommentReply } from 'models';
 import { initialState } from './state';
 import { reducer, ReducerActions } from './reducer';
 
@@ -36,6 +36,10 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         dispatch({ type: ReducerActions.DELETE_COMMENT, payload: commentId });
     };
 
+    const addComment = (commentObj: Comment) => {
+        dispatch({ type: ReducerActions.ADD_COMMENT, payload: commentObj });
+    };
+
     const contextValue = {
         ...state,
         setCommentReplyId,
@@ -43,7 +47,8 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         setCommentDeleteId,
         replyComment,
         editComment,
-        deleteComment
+        deleteComment,
+        addComment
     };
 
     return <CommentsContext.Provider value={contextValue}>{children}</CommentsContext.Provider>;

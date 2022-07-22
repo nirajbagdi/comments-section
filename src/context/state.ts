@@ -2,7 +2,7 @@ import { Comment, CommentReply } from 'models';
 import commentsData from 'data/commentsData.json';
 
 export type ContextState = {
-    comments: Comment[] | CommentReply[];
+    comments: Comment[];
     currentUser: string;
     commentReplyId: number | null;
     commentEditId: number | null;
@@ -13,6 +13,7 @@ export type ContextState = {
     replyComment: (replyObj: CommentReply) => void;
     editComment: (editedText: string) => void;
     deleteComment: (commentId: number) => void;
+    addComment: (commentObj: Comment) => void;
 };
 
 export const initialState: ContextState = {
@@ -26,5 +27,6 @@ export const initialState: ContextState = {
     setCommentDeleteId: id => {},
     replyComment: replyObj => {},
     editComment: editedText => {},
-    deleteComment: commentId => {}
+    deleteComment: commentId => {},
+    addComment: commentObj => {}
 };

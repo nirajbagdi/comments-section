@@ -7,7 +7,8 @@ export enum ReducerActions {
     SET_COMMENT_DELETE_ID = 'SET_COMMENT_DELETE_ID',
     REPLY_COMMENT = 'REPLY_COMMENT',
     EDIT_COMMENT = 'EDIT_COMMENT',
-    DELETE_COMMENT = 'DELETE_COMMENT'
+    DELETE_COMMENT = 'DELETE_COMMENT',
+    ADD_COMMENT = 'ADD_COMMENT'
 }
 
 type ReducerAction =
@@ -16,7 +17,8 @@ type ReducerAction =
     | { type: ReducerActions.SET_COMMENT_DELETE_ID; payload: number | null }
     | { type: ReducerActions.REPLY_COMMENT; payload: CommentReply }
     | { type: ReducerActions.EDIT_COMMENT; payload: string }
-    | { type: ReducerActions.DELETE_COMMENT; payload: number };
+    | { type: ReducerActions.DELETE_COMMENT; payload: number }
+    | { type: ReducerActions.ADD_COMMENT; payload: Comment };
 
 export const reducer = (state: ContextState, action: ReducerAction): ContextState => {
     switch (action.type) {
@@ -51,7 +53,7 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
                 return comment;
             });
 
-            return { ...state, comments: updatedComments as Comment[] | CommentReply[] };
+            return { ...state, comments: updatedComments };
         }
 
         case ReducerActions.EDIT_COMMENT: {
@@ -75,7 +77,7 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
                 return comment;
             });
 
-            return { ...state, comments: updatedComments as Comment[] | CommentReply[] };
+            return { ...state, comments: updatedComments };
         }
 
         case ReducerActions.DELETE_COMMENT: {
@@ -92,6 +94,11 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
                 return comment.id !== state.commentDeleteId;
             });
 
+            return { ...state, comments: updatedComments };
+        }
+
+        case ReducerActions.ADD_COMMENT: {
+            const updatedComments = [...state.comments, action.payload];
             return { ...state, comments: updatedComments };
         }
 

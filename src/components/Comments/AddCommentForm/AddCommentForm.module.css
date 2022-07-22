@@ -1,0 +1,38 @@
+.addForm {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 1.6rem;
+    row-gap: 2.4rem;
+    align-items: flex-start;
+
+    margin-top: 2.4rem;
+
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 2.4rem;
+}
+
+@media (max-width: 600px) {
+    .addForm {
+        grid-template-rows: auto auto;
+    }
+
+    .addForm textarea {
+        grid-row: 1;
+        grid-column: span 2;
+    }
+
+    .addForm button,
+    .addForm img {
+        grid-row: 2;
+    }
+
+    .addForm button {
+        justify-self: flex-end;
+    }
+}
+
+.addForm img {
+    width: 4.8rem;
+    height: 4.8rem;
+}

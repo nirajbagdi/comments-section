@@ -29,7 +29,7 @@ export class CommentReply {
     }
 }
 
-export type Comment = {
+export class Comment {
     id: number;
     content: string;
     createdAt: string;
@@ -37,4 +37,19 @@ export type Comment = {
     replies: CommentReply[];
     replyingTo?: string;
     user: CommentUser;
-};
+
+    constructor(currentUser: string, commentContent: string) {
+        this.id = Date.now();
+        this.content = commentContent;
+        this.createdAt = 'Just now';
+        this.score = 0;
+        this.replies = [];
+        this.user = {
+            username: currentUser,
+            image: {
+                png: `assets/avatars/image-${currentUser}.png`,
+                webp: `assets/avatars/image-${currentUser}.webp`
+            }
+        };
+    }
+}

@@ -18,8 +18,6 @@ const CommentReplyForm = () => {
     const handleFormSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        console.log(replyInputRef);
-
         const replyContent = replyInputRef.current!.value;
         if (!replyContent.trim().length) return;
 

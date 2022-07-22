@@ -1,5 +1,6 @@
 import CommentReplyForm from 'components/Comments/CommentReplyForm';
 import CommentEditForm from 'components/Comments/CommentEditForm';
+import CommentDeleteModal from 'components/Comments/CommentDeleteModal';
 import CommentHeader from 'components/Comments/CommentHeader';
 import CommentScore from 'components/Comments/CommentScore';
 import CommentContent from 'components/Comments/CommentContent';
@@ -20,13 +21,24 @@ const CommentItem: React.FC<Props> = props => {
     const isCurrentUser = props.comment.user.username === commentsCtx.currentUser;
     const isReplying = props.comment.id === commentsCtx.commentReplyId;
     const isEditing = props.comment.id === commentsCtx.commentEditId;
+    const isDeleting = props.comment.id === commentsCtx.commentDeleteId;
 
     const handleCommentReply = () => commentsCtx.setCommentReplyId(props.comment.id);
     const handleCommentEdit = () => commentsCtx.setCommentEditId(props.comment.id);
-    const handleCommentDelete = () => {};
+    const handleCommentDelete = () => commentsCtx.setCommentDeleteId(props.comment.id);
+
+    const handleCommentDeleteModalConfirm = () => commentsCtx.deleteComment(props.comment.id);
+    const handleCommentDeleteModalCancel = () => commentsCtx.setCommentDeleteId(null);
 
     return (
         <>
+            {isDeleting && (
+                <CommentDeleteModal
+                    onCancel={handleCommentDeleteModalCancel}
+                    onConfirm={handleCommentDeleteModalConfirm}
+                />
+            )}
+
             <div className={styles.comment}>
                 <CommentScore score={props.comment.score} />
 

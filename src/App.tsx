@@ -1,5 +1,6 @@
 import CommentItem from 'components/Comments/CommentItem';
 import { useComments } from 'context';
+import { Comment, CommentReply } from 'models';
 
 const App = () => {
     const { comments } = useComments();

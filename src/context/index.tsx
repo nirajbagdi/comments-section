@@ -20,6 +20,10 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         dispatch({ type: ReducerActions.SET_COMMENT_EDIT_ID, payload: commentId });
     };
 
+    const setCommentDeleteId = (commentId: number | null) => {
+        dispatch({ type: ReducerActions.SET_COMMENT_DELETE_ID, payload: commentId });
+    };
+
     const replyComment = (commentReplyObj: CommentReply) => {
         dispatch({ type: ReducerActions.REPLY_COMMENT, payload: commentReplyObj });
     };
@@ -28,17 +32,19 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         dispatch({ type: ReducerActions.EDIT_COMMENT, payload: editedText });
     };
 
+    const deleteComment = (commentId: number) => {
+        dispatch({ type: ReducerActions.DELETE_COMMENT, payload: commentId });
+    };
+
     const contextValue = {
         ...state,
         setCommentReplyId,
         setCommentEditId,
+        setCommentDeleteId,
         replyComment,
-        editComment
+        editComment,
+        deleteComment
     };
 
-    return (
-        <CommentsContext.Provider value={contextValue}>
-            {children}
-        </CommentsContext.Provider>
-    );
+    return <CommentsContext.Provider value={contextValue}>{children}</CommentsContext.Provider>;
 };

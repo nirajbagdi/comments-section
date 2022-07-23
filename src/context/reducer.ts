@@ -107,16 +107,21 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
         case ReducerActions.UPDATE_SCORE: {
             const updatedComments = state.comments.map(comment => {
                 const hasReplies = comment.replies?.some(r => r.id === action.payload.commentId);
+                const isCurrentUser = comment.user.username === state.currentUser;
 
-                if (comment.id === action.payload.commentId) {
+                if (!isCurrentUser && comment.id === action.payload.commentId) {
                     return { ...comment, updatedScore: action.payload.updatedScore };
                 }
 
                 if (hasReplies) {
                     const updatedReplies = comment.replies!.map(reply => {
-                        return reply.id === action.payload.commentId
-                            ? { ...reply, updatedScore: action.payload.updatedScore }
-                            : reply;
+                        const isCurrentUser = reply.user.username === state.currentUser;
+
+                        if (!isCurrentUser && reply.id === action.payload.commentId) {
+                            return { ...reply, updatedScore: action.payload.updatedScore };
+                        }
+
+                        return reply;
                     });
 
                     return { ...comment, replies: updatedReplies };

@@ -11,8 +11,6 @@ const CommentScore: React.FC<Props> = props => {
     const [score, setScore] = useState(props.comment.score);
     const commentsCtx = useComments();
 
-    console.log(props.comment.score, score);
-
     const handleScoreIncrease = () => {
         if (score >= props.comment.score + 1) return;
         setScore(score => score + 1);
@@ -25,12 +23,13 @@ const CommentScore: React.FC<Props> = props => {
 
     useEffect(() => {
         commentsCtx.updateScore(props.comment.id, score);
+        // eslint-disable-next-line
     }, [score]);
 
     return (
         <div className={styles.commentScore}>
             <button onClick={handleScoreIncrease}>+</button>
-            <span>{props.comment.updatedScore}</span>
+            <span>{props.comment.updatedScore || props.comment.score}</span>
             <button onClick={handleScoreDecrease}>&mdash;</button>
         </div>
     );

@@ -14,6 +14,7 @@ export type ContextState = {
     editComment: (editedText: string) => void;
     deleteComment: (commentId: number) => void;
     addComment: (commentObj: Comment) => void;
+    updateScore: (commentId: number, updatedScore: number) => void;
 };
 
 export const initialState: ContextState = {
@@ -28,5 +29,6 @@ export const initialState: ContextState = {
     replyComment: replyObj => {},
     editComment: editedText => {},
     deleteComment: commentId => {},
-    addComment: commentObj => {}
+    addComment: commentObj => {},
+    updateScore: (commentId, updatedScore) => {}
 };

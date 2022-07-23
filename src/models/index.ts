@@ -11,6 +11,7 @@ export class CommentReply {
     replyingTo: string;
     replies?: CommentReply[];
     user: CommentUser;
+    updatedScore?: number;
 
     constructor(currentUser: string, replyingTo: string, replyContent: string) {
         this.id = Date.now();
@@ -19,6 +20,7 @@ export class CommentReply {
         this.score = 0;
         this.replyingTo = replyingTo;
         this.replies = [];
+        this.updatedScore = 0;
         this.user = {
             username: currentUser,
             image: {
@@ -37,6 +39,7 @@ export class Comment {
     replies: CommentReply[];
     replyingTo?: string;
     user: CommentUser;
+    updatedScore?: number;
 
     constructor(currentUser: string, commentContent: string) {
         this.id = Date.now();
@@ -44,6 +47,7 @@ export class Comment {
         this.createdAt = 'Just now';
         this.score = 0;
         this.replies = [];
+        this.updatedScore = 0;
         this.user = {
             username: currentUser,
             image: {

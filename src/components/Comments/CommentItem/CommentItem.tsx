@@ -40,7 +40,7 @@ const CommentItem: React.FC<Props> = props => {
             )}
 
             <div className={styles.comment}>
-                <CommentScore score={props.comment.score} />
+                <CommentScore comment={props.comment} />
 
                 <CommentHeader
                     username={props.comment.user.username}

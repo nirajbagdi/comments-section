@@ -8,7 +8,8 @@ export enum ReducerActions {
     REPLY_COMMENT = 'REPLY_COMMENT',
     EDIT_COMMENT = 'EDIT_COMMENT',
     DELETE_COMMENT = 'DELETE_COMMENT',
-    ADD_COMMENT = 'ADD_COMMENT'
+    ADD_COMMENT = 'ADD_COMMENT',
+    UPDATE_SCORE = 'UPDATE_SCORE'
 }
 
 type ReducerAction =
@@ -18,7 +19,8 @@ type ReducerAction =
     | { type: ReducerActions.REPLY_COMMENT; payload: CommentReply }
     | { type: ReducerActions.EDIT_COMMENT; payload: string }
     | { type: ReducerActions.DELETE_COMMENT; payload: number }
-    | { type: ReducerActions.ADD_COMMENT; payload: Comment };
+    | { type: ReducerActions.ADD_COMMENT; payload: Comment }
+    | { type: ReducerActions.UPDATE_SCORE; payload: { commentId: number; updatedScore: number } };
 
 export const reducer = (state: ContextState, action: ReducerAction): ContextState => {
     switch (action.type) {
@@ -99,6 +101,30 @@ export const reducer = (state: ContextState, action: ReducerAction): ContextStat
 
         case ReducerActions.ADD_COMMENT: {
             const updatedComments = [...state.comments, action.payload];
+            return { ...state, comments: updatedComments };
+        }
+
+        case ReducerActions.UPDATE_SCORE: {
+            const updatedComments = state.comments.map(comment => {
+                const hasReplies = comment.replies?.some(r => r.id === action.payload.commentId);
+
+                if (comment.id === action.payload.commentId) {
+                    return { ...comment, updatedScore: action.payload.updatedScore };
+                }
+
+                if (hasReplies) {
+                    const updatedReplies = comment.replies!.map(reply => {
+                        return reply.id === action.payload.commentId
+                            ? { ...reply, updatedScore: action.payload.updatedScore }
+                            : reply;
+                    });
+
+                    return { ...comment, replies: updatedReplies };
+                }
+
+                return comment;
+            });
+
             return { ...state, comments: updatedComments };
         }
 

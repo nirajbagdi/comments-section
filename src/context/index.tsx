@@ -40,6 +40,10 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         dispatch({ type: ReducerActions.ADD_COMMENT, payload: commentObj });
     };
 
+    const updateScore = (commentId: number, updatedScore: number) => {
+        dispatch({ type: ReducerActions.UPDATE_SCORE, payload: { commentId, updatedScore } });
+    };
+
     const contextValue = {
         ...state,
         setCommentReplyId,
@@ -48,7 +52,8 @@ export const CommentsProvider: React.FC<Props> = ({ children }) => {
         replyComment,
         editComment,
         deleteComment,
-        addComment
+        addComment,
+        updateScore
     };
 
     return <CommentsContext.Provider value={contextValue}>{children}</CommentsContext.Provider>;

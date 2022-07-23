@@ -31,7 +31,7 @@ const CommentItem: React.FC<Props> = props => {
     const handleCommentDeleteModalCancel = () => commentsCtx.setCommentDeleteId(null);
 
     return (
-        <>
+        <div className={styles.commentContainer}>
             {isDeleting && (
                 <CommentDeleteModal
                     onCancel={handleCommentDeleteModalCancel}
@@ -67,12 +67,14 @@ const CommentItem: React.FC<Props> = props => {
 
             {isReplying && <CommentReplyForm />}
 
-            {props.comment.replies?.map(commentReply => (
-                <div className={styles.commentReply} key={commentReply.id}>
-                    <CommentItem comment={commentReply} />
-                </div>
-            ))}
-        </>
+            <div className={styles.commentReplies}>
+                {props.comment.replies?.map(commentReply => (
+                    <div className={styles.commentReply} key={commentReply.id}>
+                        <CommentItem comment={commentReply} />
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 };
 

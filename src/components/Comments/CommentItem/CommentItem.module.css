@@ -12,8 +12,22 @@
     padding: 2.4rem;
 }
 
-.comment:not(:first-child) {
+.commentContainer:not(:first-child) {
     margin-top: 2.4rem;
+}
+
+.commentReplies {
+    position: relative;
+}
+
+.commentReplies::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 5%;
+    width: 3px;
+    height: 100%;
+    background-color: var(--lightGray);
 }
 
 .commentReply {
@@ -26,12 +40,20 @@
 }
 
 @media (max-width: 950px) {
+    .commentReplies::before {
+        left: 2%;
+    }
+
     .commentReply {
         margin-left: 4.8rem;
     }
 }
 
 @media (max-width: 800px) {
+    .commentReplies::before {
+        left: 5px;
+    }
+
     .comment {
         grid-template-rows: auto 1fr auto;
     }

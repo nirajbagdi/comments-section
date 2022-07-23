@@ -8,7 +8,7 @@ type Props = {
 const CommentContent: React.FC<Props> = props => (
     <blockquote className={styles.commentContent}>
         {props.replyingTo !== '' && (
-            <a href="#" className={styles.replyingTo}>
+            <a href="/" className={styles.replyingTo}>
                 @{props.replyingTo}
             </a>
         )}{' '}

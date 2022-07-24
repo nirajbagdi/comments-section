@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { motion } from 'framer-motion';
+
 import { useComments } from 'context';
 import { Comment, CommentReply } from 'models';
 
@@ -9,6 +11,7 @@ type Props = { comment: Comment | CommentReply };
 
 const CommentScore: React.FC<Props> = props => {
     const [score, setScore] = useState(props.comment.score);
+    const [scoreScale, setScoreScale] = useState(1);
     const commentsCtx = useComments();
 
     const handleScoreIncrease = () => {
@@ -23,13 +26,19 @@ const CommentScore: React.FC<Props> = props => {
 
     useEffect(() => {
         commentsCtx.updateScore(props.comment.id, score);
+        setScoreScale(1.3);
+
+        const timer = setTimeout(() => setScoreScale(1), 300);
+        return () => clearTimeout(timer);
         // eslint-disable-next-line
     }, [score]);
 
     return (
         <div className={styles.commentScore}>
             <button onClick={handleScoreIncrease}>+</button>
-            <span>{props.comment.updatedScore || props.comment.score}</span>
+            <motion.span animate={{ scale: scoreScale }}>
+                {props.comment.updatedScore || props.comment.score}
+            </motion.span>
             <button onClick={handleScoreDecrease}>&mdash;</button>
         </div>
     );

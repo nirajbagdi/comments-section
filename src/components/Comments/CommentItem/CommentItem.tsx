@@ -9,6 +9,8 @@ import CommentActions from 'components/Comments/CommentActions';
 import { useComments } from 'context';
 import { Comment, CommentReply } from 'models';
 
+import { motion } from 'framer-motion';
+
 import styles from './CommentItem.module.css';
 
 type Props = {
@@ -39,7 +41,13 @@ const CommentItem: React.FC<Props> = props => {
                 />
             )}
 
-            <div className={styles.comment}>
+            <motion.div
+                layout
+                initial={{ opacity: 0, y: -100, scale: 0.6 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className={styles.comment}
+            >
                 <CommentScore comment={props.comment} />
 
                 <CommentHeader
@@ -63,7 +71,7 @@ const CommentItem: React.FC<Props> = props => {
                 )}
 
                 {isEditing && <CommentEditForm defaultValue={props.comment.content} />}
-            </div>
+            </motion.div>
 
             {isReplying && <CommentReplyForm />}
 

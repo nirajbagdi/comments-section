@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'react';
 
+import { motion } from 'framer-motion';
+
 import Input from 'components/UI/Input';
 import Button from 'components/UI/Button';
 
@@ -41,11 +43,17 @@ const CommentReplyForm = () => {
     }, []);
 
     return (
-        <form className={styles.replyForm} onSubmit={handleFormSubmit}>
+        <motion.form
+            className={styles.replyForm}
+            onSubmit={handleFormSubmit}
+            initial={{ y: -50, opacity: 0.6 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <img src={userImg} alt={commentsCtx.currentUser} />
             <Input ref={replyInputRef} input={{ placeholder: 'Add a reply...' }} />
             <Button variant="contained-primary" label="Reply" />
-        </form>
+        </motion.form>
     );
 };
 

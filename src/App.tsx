@@ -7,13 +7,13 @@ const App = () => {
     const { comments, currentUser } = useComments();
 
     return (
-        <div className="container">
+        <main className="container">
             {comments.map(comment => (
                 <CommentItem key={comment.id} comment={comment} />
             ))}
 
             <AddCommentForm currentUser={currentUser} />
-        </div>
+        </main>
     );
 };
 

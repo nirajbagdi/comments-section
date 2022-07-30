@@ -1,3 +1,5 @@
+import { getCommentElapsedTime } from 'utils';
+
 export type CommentUser = {
     image: { png: string; webp: string };
     username: string;
@@ -16,7 +18,7 @@ export class CommentReply {
     constructor(currentUser: string, replyingTo: string, replyContent: string) {
         this.id = Date.now();
         this.content = replyContent;
-        this.createdAt = 'Just now';
+        this.createdAt = getCommentElapsedTime(new Date());
         this.score = 0;
         this.replyingTo = replyingTo;
         this.replies = [];
@@ -44,7 +46,7 @@ export class Comment {
     constructor(currentUser: string, commentContent: string) {
         this.id = Date.now();
         this.content = commentContent;
-        this.createdAt = 'Just now';
+        this.createdAt = getCommentElapsedTime(new Date());
         this.score = 0;
         this.replies = [];
         this.updatedScore = 0;

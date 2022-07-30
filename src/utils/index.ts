@@ -19,7 +19,6 @@ export const getCommentElapsedTime = (commentDate: Date) => {
     const currDate = Date.now();
     let timeDiff = Math.floor((+currDate - +commentDate) / 1000);
 
-    const secondsLeft = timeDiff % 60;
     timeDiff = Math.floor(timeDiff / 60);
 
     const minutesLeft = timeDiff % 60;

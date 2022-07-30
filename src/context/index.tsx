@@ -1,7 +1,7 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 
 import { Comment, CommentReply } from 'models';
-import { initialState } from './state';
+import { ContextState, initialState } from './state';
 import { reducer, ReducerActions } from './reducer';
 
 type Props = { children: React.ReactNode };
@@ -9,8 +9,18 @@ type Props = { children: React.ReactNode };
 const CommentsContext = createContext(initialState);
 export const useComments = () => useContext(CommentsContext);
 
+const initializer = (state: ContextState = initialState) => {
+    const storageValue = localStorage.getItem('comments');
+    const storageComments = storageValue !== null ? JSON.parse(storageValue) : state.comments;
+    return { ...state, comments: storageComments };
+};
+
 export const CommentsProvider: React.FC<Props> = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState, initializer);
+
+    useEffect(() => {
+        localStorage.setItem('comments', JSON.stringify(state.comments));
+    }, [state.comments]);
 
     const setCommentReplyId = (commentId: number | null) => {
         dispatch({ type: ReducerActions.SET_COMMENT_REPLY_ID, payload: commentId });

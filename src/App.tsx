@@ -1,20 +1,15 @@
-import CommentItem from 'components/Comments/CommentItem';
-import AddCommentForm from 'components/Comments/AddCommentForm';
-
-import { useComments } from 'context';
+import { CommentList, AddCommentForm } from 'components/Comments';
+import { useAppContext } from 'store/context';
 
 const App = () => {
-    const { comments, currentUser } = useComments();
+	const appContext = useAppContext();
 
-    return (
-        <main className="container">
-            {comments.map(comment => (
-                <CommentItem key={comment.id} comment={comment} />
-            ))}
-
-            <AddCommentForm currentUser={currentUser} />
-        </main>
-    );
+	return (
+		<div className="container">
+			<CommentList comments={appContext.comments} />
+			<AddCommentForm />
+		</div>
+	);
 };
 
 export default App;

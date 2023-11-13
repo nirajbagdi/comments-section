@@ -1,12 +1,13 @@
 import ReactDOM from 'react-dom/client';
+import AppStateProvider from 'store';
+import App from 'App';
 
-import { CommentsProvider } from 'context';
+import 'styles/index.scss';
 
-import App from './App';
-import 'styles/main.css';
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <CommentsProvider>
-        <App />
-    </CommentsProvider>
+root.render(
+	<AppStateProvider>
+		<App />
+	</AppStateProvider>
 );

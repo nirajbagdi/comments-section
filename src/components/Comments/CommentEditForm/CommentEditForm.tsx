@@ -1,38 +1,30 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
+import { Input, Button } from 'components/UI';
+import styles from './CommentEditForm.module.scss';
 
-import Input from 'components/UI/Input';
-import Button from 'components/UI/Button';
+interface Props {
+	defaultValue: string;
+	onFormSubmit: (value: string) => void;
+}
 
-import { useComments } from 'context';
+const CommentEditForm: React.FC<Props> = ({ defaultValue, onFormSubmit }) => {
+	const textInputRef = useRef<HTMLTextAreaElement>(null);
 
-import styles from './CommentEditForm.module.css';
+	const handleFormSubmit = (event: React.FormEvent) => {
+		event.preventDefault();
 
-type Props = { defaultValue: string };
+		const textValue = textInputRef.current!.value;
+		if (!textValue.trim().length) return;
 
-const CommentEditForm: React.FC<Props> = props => {
-    const editInputRef = useRef<HTMLTextAreaElement>(null);
-    const commentsCtx = useComments();
+		onFormSubmit(textValue);
+	};
 
-    const handleFormSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-
-        const editedText = editInputRef.current!.value;
-        if (!editedText.trim().length) return;
-
-        commentsCtx.editComment(editedText);
-        commentsCtx.setCommentEditId(null);
-    };
-
-    useEffect(() => {
-        editInputRef.current!.focus();
-    }, []);
-
-    return (
-        <form className={styles.editForm} onSubmit={handleFormSubmit}>
-            <Input ref={editInputRef} input={{ defaultValue: props.defaultValue }} />
-            <Button variant="contained-primary" label="Update" />
-        </form>
-    );
+	return (
+		<form className={styles.editForm} onSubmit={handleFormSubmit}>
+			<Input ref={textInputRef} input={{ defaultValue }} />
+			<Button variant="contained-primary" label="Update" />
+		</form>
+	);
 };
 
 export default CommentEditForm;

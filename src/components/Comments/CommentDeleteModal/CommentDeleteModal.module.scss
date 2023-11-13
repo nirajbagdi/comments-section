@@ -1,0 +1,19 @@
+@import 'styles/base';
+
+.deleteModalContent h2 {
+	color: $darkBlue;
+	font-weight: 500;
+	margin-bottom: 2rem;
+}
+
+.deleteModalContent p {
+	line-height: 1.5;
+}
+
+.deleteModalActions {
+	margin-top: 1.6rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}

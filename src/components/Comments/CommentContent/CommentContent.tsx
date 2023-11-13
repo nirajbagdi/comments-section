@@ -1,19 +1,16 @@
-import styles from './CommentContent.module.css';
+import styles from './CommentContent.module.scss';
 
-type Props = {
-    replyingTo: string;
-    content: string;
+interface Props {
+	replyingTo: string;
+	content: string;
+}
+
+const CommentContent: React.FC<Props> = ({ replyingTo, content }) => {
+	return (
+		<p className={styles.text}>
+			{replyingTo && <span className={styles.replyingTo}>@{replyingTo}</span>} {content}
+		</p>
+	);
 };
-
-const CommentContent: React.FC<Props> = props => (
-    <blockquote className={styles.commentContent}>
-        {props.replyingTo !== '' && (
-            <a href="/" className={styles.replyingTo}>
-                @{props.replyingTo}
-            </a>
-        )}{' '}
-        {props.content}
-    </blockquote>
-);
 
 export default CommentContent;

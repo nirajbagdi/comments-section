@@ -1,47 +1,62 @@
 import { useState, useEffect } from 'react';
+import { useAppContext } from 'store/context';
+import { IComment } from 'models';
+import styles from './CommentScore.module.scss';
 
-import { motion } from 'framer-motion';
+interface Props {
+	comment: IComment;
+	isCurrentUser: boolean;
+}
 
-import { useComments } from 'context';
-import { Comment, CommentReply } from 'models';
+const CommentScore: React.FC<Props> = ({ comment, isCurrentUser }) => {
+	const [score, setScore] = useState(comment.score);
+	const [scoreScale, setScoreScale] = useState(1);
 
-import styles from './CommentScore.module.css';
+	const [hasScoreUpdated, setHasScoreUpdated] = useState<boolean>(
+		() => JSON.parse(localStorage.getItem(`hasScoreUpdated_${comment.id}`)!) || false
+	);
 
-type Props = { comment: Comment | CommentReply };
+	const appContext = useAppContext();
 
-const CommentScore: React.FC<Props> = props => {
-    const [score, setScore] = useState(props.comment.score);
-    const [scoreScale, setScoreScale] = useState(1);
-    const commentsCtx = useComments();
+	useEffect(() => {
+		if (hasScoreUpdated) {
+			appContext.updateScore(comment.id, score);
+			setScoreScale(1.8);
 
-    const handleScoreIncrease = () => {
-        if (score >= props.comment.score + 1) return;
-        setScore(score => score + 1);
-    };
+			const timeout = setTimeout(() => setScoreScale(1), 200);
+			return () => clearTimeout(timeout);
+		}
 
-    const handleScoreDecrease = () => {
-        if (score <= props.comment.score - 1 || score < 1) return;
-        setScore(score => score - 1);
-    };
+		// eslint-disable-next-line
+	}, [hasScoreUpdated, score]);
 
-    useEffect(() => {
-        commentsCtx.updateScore(props.comment.id, score);
-        setScoreScale(1.3);
+	const handleScoreUpdate = (type: 'inc' | 'dec') => {
+		if (!hasScoreUpdated && !isCurrentUser) {
+			setScore(prev => (type === 'inc' ? prev + 1 : prev - 1));
+			setHasScoreUpdated(true);
+			localStorage.setItem(`hasScoreUpdated_${comment.id}`, 'true');
+		}
+	};
 
-        const timer = setTimeout(() => setScoreScale(1), 300);
-        return () => clearTimeout(timer);
-        // eslint-disable-next-line
-    }, [score]);
+	return (
+		<div className={styles.score}>
+			<button
+				onClick={() => handleScoreUpdate('inc')}
+				disabled={hasScoreUpdated || isCurrentUser}
+			>
+				+
+			</button>
 
-    return (
-        <div className={styles.commentScore}>
-            <button onClick={handleScoreIncrease}>+</button>
-            <motion.span animate={{ scale: scoreScale }}>
-                {props.comment.updatedScore || props.comment.score}
-            </motion.span>
-            <button onClick={handleScoreDecrease}>&mdash;</button>
-        </div>
-    );
+			<p style={{ transform: `scale(${scoreScale})` }}>{score}</p>
+
+			<button
+				onClick={() => handleScoreUpdate('dec')}
+				disabled={hasScoreUpdated || isCurrentUser}
+			>
+				—
+			</button>
+		</div>
+	);
 };
 
 export default CommentScore;

@@ -1,0 +1,32 @@
+@import 'styles/base';
+
+.comment {
+	background-color: $white;
+	padding: 2.4rem;
+	border-radius: 12px;
+
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	gap: 1.6rem 2.4rem;
+
+	margin-bottom: 2.4rem;
+
+	@include mobile {
+		grid-template-rows: auto auto auto;
+	}
+}
+
+.replies {
+	position: relative;
+	margin-left: 6.4rem;
+
+	&::before {
+		position: absolute;
+		content: '';
+		top: 0;
+		left: -3.2rem;
+		height: 100%;
+		width: 3px;
+		background: $lightGray;
+	}
+}

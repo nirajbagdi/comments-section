@@ -1,0 +1,15 @@
+@import 'styles/base';
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 2.4rem;
+
+	grid-row: 1;
+	grid-column: 3/-1;
+
+	@include mobile {
+		grid-row: 3;
+		margin-left: auto;
+	}
+}

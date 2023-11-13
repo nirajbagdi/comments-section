@@ -1,0 +1,35 @@
+@import 'styles/base';
+
+.header {
+	display: flex;
+	align-items: center;
+	gap: 1.8rem;
+
+	@include mobile {
+		grid-column: 1/-1;
+	}
+
+	img {
+		width: 4rem;
+	}
+}
+
+.usernameWrapper {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+
+	.username {
+		color: $darkBlue;
+		font-weight: 600;
+	}
+
+	.badge {
+		font-size: 1.6rem;
+		color: $white;
+
+		background-color: $moderateBlue;
+		border-radius: 4px;
+		padding: 0.3rem 1rem;
+	}
+}

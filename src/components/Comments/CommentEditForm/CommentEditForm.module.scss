@@ -1,0 +1,18 @@
+@import 'styles/base';
+
+.editForm {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6rem;
+
+	line-height: 1.6;
+	grid-column: 2/-1;
+
+	button {
+		align-self: flex-end;
+	}
+
+	@include mobile {
+		grid-column: 1/-1;
+	}
+}

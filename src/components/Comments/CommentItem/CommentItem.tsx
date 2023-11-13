@@ -1,89 +1,122 @@
-import CommentReplyForm from 'components/Comments/CommentReplyForm';
-import CommentEditForm from 'components/Comments/CommentEditForm';
-import CommentDeleteModal from 'components/Comments/CommentDeleteModal';
-import CommentHeader from 'components/Comments/CommentHeader';
-import CommentScore from 'components/Comments/CommentScore';
-import CommentContent from 'components/Comments/CommentContent';
-import CommentActions from 'components/Comments/CommentActions';
-
-import { useComments } from 'context';
-import { Comment, CommentReply } from 'models';
-
+import { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { motion } from 'framer-motion';
+import { useAppContext } from 'store/context';
+import {
+	CommentActions,
+	CommentHeader,
+	CommentScore,
+	CommentContent,
+	CommentList,
+	CommentDeleteModal,
+	CommentEditForm,
+	CommentReplyForm,
+} from 'components/Comments';
+import { IComment } from 'models';
+import styles from './CommentItem.module.scss';
 
-import styles from './CommentItem.module.css';
+interface Props {
+	comment: IComment;
+}
 
-type Props = {
-    comment: Comment | CommentReply;
-};
+const CommentItem: React.FC<Props> = ({ comment }) => {
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
+	const [isReplying, setIsReplying] = useState(false);
 
-const CommentItem: React.FC<Props> = props => {
-    const commentsCtx = useComments();
+	const appContext = useAppContext();
+	const isCurrentUser = comment.user.username === appContext.currentUser.username;
 
-    const isCurrentUser = props.comment.user.username === commentsCtx.currentUser;
-    const isReplying = props.comment.id === commentsCtx.commentReplyId;
-    const isEditing = props.comment.id === commentsCtx.commentEditId;
-    const isDeleting = props.comment.id === commentsCtx.commentDeleteId;
+	const handleDelete = () => setIsDeleting(true);
+	const handleCancelDelete = () => setIsDeleting(false);
+	const handleConfirmDelete = () => appContext.deleteComment(comment.id);
 
-    const handleCommentReply = () => commentsCtx.setCommentReplyId(props.comment.id);
-    const handleCommentEdit = () => commentsCtx.setCommentEditId(props.comment.id);
-    const handleCommentDelete = () => commentsCtx.setCommentDeleteId(props.comment.id);
+	const handleEdit = () => setIsEditing(true);
 
-    const handleCommentDeleteModalConfirm = () => commentsCtx.deleteComment(props.comment.id);
-    const handleCommentDeleteModalCancel = () => commentsCtx.setCommentDeleteId(null);
+	const handleConfirmEdit = (contentValue: string) => {
+		const updatedComment: IComment = {
+			...comment,
+			content: contentValue,
+			createdAt: new Date().toISOString(),
+		};
 
-    return (
-        <div className={styles.commentContainer}>
-            {isDeleting && (
-                <CommentDeleteModal
-                    onCancel={handleCommentDeleteModalCancel}
-                    onConfirm={handleCommentDeleteModalConfirm}
-                />
-            )}
+		appContext.updateComment(updatedComment);
+		setIsEditing(false);
+	};
 
-            <motion.div
-                layout
-                initial={{ opacity: 0, y: -100, scale: 0.6 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className={styles.comment}
-            >
-                <CommentScore comment={props.comment} />
+	const handleReply = () => setIsReplying(true);
 
-                <CommentHeader
-                    username={props.comment.user.username}
-                    createdAt={props.comment.createdAt}
-                    isCurrentUser={isCurrentUser}
-                />
+	const handleConfirmReply = (contentValue: string) => {
+		const repliedComment: IComment = {
+			id: uuid(),
+			content: contentValue,
+			createdAt: new Date().toISOString(),
+			user: appContext.currentUser,
+			replyingTo: comment.user.username,
+			score: 0,
+		};
 
-                <CommentActions
-                    isCurrentUser={isCurrentUser}
-                    onCommentDelete={handleCommentDelete}
-                    onCommentEdit={handleCommentEdit}
-                    onCommentReply={handleCommentReply}
-                />
+		appContext.addReply(comment.id, repliedComment);
+		setIsReplying(false);
+	};
 
-                {!isEditing && (
-                    <CommentContent
-                        content={props.comment.content}
-                        replyingTo={props.comment.replyingTo || ''}
-                    />
-                )}
+	const commentRepliesContent = comment.replies && comment.replies.length !== 0 && (
+		<div className={styles.replies}>
+			<CommentList comments={comment.replies} />
+		</div>
+	);
 
-                {isEditing && <CommentEditForm defaultValue={props.comment.content} />}
-            </motion.div>
+	return (
+		<>
+			{isDeleting && (
+				<CommentDeleteModal onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
+			)}
 
-            {isReplying && <CommentReplyForm />}
+			<motion.div
+				layout
+				initial={{ opacity: 0, y: -80, scale: 0.6 }}
+				animate={{ opacity: 1, y: 0, scale: 1 }}
+				transition={{ duration: 0.3 }}
+				className={styles.comment}
+			>
+				<CommentScore comment={comment} isCurrentUser={isCurrentUser} />
 
-            <div className={styles.commentReplies}>
-                {props.comment.replies?.map(commentReply => (
-                    <div className={styles.commentReply} key={commentReply.id}>
-                        <CommentItem comment={commentReply} />
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+				<CommentHeader
+					user={comment.user}
+					createdAt={comment.createdAt}
+					isCurrentUser={isCurrentUser}
+				/>
+
+				{isEditing ? (
+					<CommentEditForm
+						defaultValue={comment.content}
+						onFormSubmit={handleConfirmEdit}
+					/>
+				) : (
+					<CommentContent
+						replyingTo={comment.replyingTo ?? ''}
+						content={comment.content}
+					/>
+				)}
+
+				<CommentActions
+					isCurrentUser={isCurrentUser}
+					onCommentDelete={handleDelete}
+					onCommentEdit={handleEdit}
+					onCommentReply={handleReply}
+				/>
+			</motion.div>
+
+			{isReplying && (
+				<CommentReplyForm
+					currentUser={appContext.currentUser}
+					onFormSubmit={handleConfirmReply}
+				/>
+			)}
+
+			{commentRepliesContent}
+		</>
+	);
 };
 
 export default CommentItem;

@@ -1,41 +1,41 @@
 import { useRef } from 'react';
+import { v4 as uuid } from 'uuid';
 
-import Input from 'components/UI/Input';
-import Button from 'components/UI/Button';
+import { useAppContext } from 'store/context';
+import { Input, Button } from 'components/UI';
 
-import { useComments } from 'context';
-import { Comment } from 'models';
+import styles from './AddCommentForm.module.scss';
 
-import styles from './AddCommentForm.module.css';
+const AddCommentForm = () => {
+	const textInputRef = useRef<HTMLTextAreaElement>(null);
+	const appContext = useAppContext();
 
-type Props = {
-    currentUser: string;
-};
+	const userImg = require(`assets/avatars/${appContext.currentUser.image.png}`);
 
-const AddCommentForm: React.FC<Props> = props => {
-    const textInputRef = useRef<HTMLTextAreaElement>(null);
-    const commentsCtx = useComments();
+	const handleFormSubmit = (event: React.FormEvent) => {
+		event.preventDefault();
 
-    const userImg = require(`assets/avatars/image-${props.currentUser}.png`);
+		const textValue = textInputRef.current!.value;
+		if (!textValue.trim().length) return;
 
-    const handleFormSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
+		appContext.addComment({
+			id: uuid(),
+			content: textValue,
+			createdAt: new Date().toISOString(),
+			user: appContext.currentUser,
+			score: 0,
+		});
 
-        const commentText = textInputRef.current!.value;
-        if (!commentText.trim().length) return;
+		textInputRef.current!.value = '';
+	};
 
-        const commentObj = new Comment(commentsCtx.currentUser, commentText);
-        commentsCtx.addComment(commentObj);
-        textInputRef.current!.value = '';
-    };
-
-    return (
-        <form className={styles.addForm} onSubmit={handleFormSubmit}>
-            <img src={userImg} alt={props.currentUser} />
-            <Input ref={textInputRef} input={{ placeholder: 'Add a comment...' }} />
-            <Button variant="contained-primary" label="Send" />
-        </form>
-    );
+	return (
+		<form className={styles.form} onSubmit={handleFormSubmit}>
+			<img src={userImg} alt={appContext.currentUser.username} />
+			<Input ref={textInputRef} input={{ placeholder: 'Add a comment...' }} />
+			<Button variant="contained-primary" label="Send" />
+		</form>
+	);
 };
 
 export default AddCommentForm;

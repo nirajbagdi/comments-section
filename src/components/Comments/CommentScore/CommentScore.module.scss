@@ -1,41 +1,41 @@
 @import 'styles/base';
 
 .score {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
 
-	width: 5.5rem;
-	height: 12.5rem;
+    width: 5.5rem;
+    height: 12.5rem;
 
-	grid-row: 1/3;
+    grid-row: 1/3;
 
-	background-color: $veryLightGray;
-	border-radius: 12px;
+    background-color: $veryLightGray;
+    border-radius: 12px;
 
-	@include mobile {
-		flex-direction: row;
-		width: 11rem;
-		height: 4.8rem;
-		grid-row: 3;
-	}
+    @include mobile {
+        flex-direction: row;
+        width: 11rem;
+        height: 4.8rem;
+        grid-row: 3;
+    }
 
-	button {
-		color: $lightGrayishBlue;
-		font-weight: 600;
-		background-color: transparent;
+    button {
+        color: $lightGrayishBlue;
+        font-weight: 600;
+        background-color: transparent;
 
-		&:disabled {
-			color: $lightGray;
-			cursor: not-allowed;
-		}
-	}
+        &:disabled {
+            color: rgb(195, 196, 239, 0.6);
+            cursor: not-allowed;
+        }
+    }
 
-	p {
-		color: $moderateBlue;
-		font-weight: 600;
-		transition: all 0.2s ease-out;
-	}
+    p {
+        color: $moderateBlue;
+        font-weight: 600;
+        transition: all 0.2s ease-out;
+    }
 }

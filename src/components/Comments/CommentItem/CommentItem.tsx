@@ -23,7 +23,6 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
-    const [hasEdited, setHasEdited] = useState(false);
 
     const appContext = useAppContext();
     const isCurrentUser = comment.user.username === appContext.currentUser.username;
@@ -44,11 +43,11 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
             ...comment,
             content: contentValue,
             createdAt: new Date().toISOString(),
+            hasEdited: true,
         };
 
         appContext.updateComment(updatedComment);
         setIsEditing(false);
-        setHasEdited(true);
     };
 
     const handleReply = () => setIsReplying((prev) => !prev);
@@ -96,7 +95,7 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
                     user={comment.user}
                     createdAt={comment.createdAt}
                     isCurrentUser={isCurrentUser}
-                    hasEdited={hasEdited}
+                    hasEdited={comment.hasEdited!}
                 />
 
                 {isEditing ? (

@@ -32,7 +32,7 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
     const handleCancelDelete = () => setIsDeleting(false);
     const handleConfirmDelete = () => appContext.deleteComment(comment.id);
 
-    const handleEdit = () => setIsEditing(true);
+    const handleEdit = () => setIsEditing((prev) => !prev);
 
     const handleConfirmEdit = (contentValue: string) => {
         if (!contentValue.trim().length || contentValue === comment.content) {
@@ -51,7 +51,7 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
         setHasEdited(true);
     };
 
-    const handleReply = () => setIsReplying(true);
+    const handleReply = () => setIsReplying((prev) => !prev);
 
     const handleConfirmReply = (contentValue: string) => {
         const repliedComment: IComment = {
@@ -113,6 +113,9 @@ const CommentItem: React.FC<Props> = ({ comment }) => {
 
                 <CommentActions
                     isCurrentUser={isCurrentUser}
+                    isReplying={isReplying}
+                    isDeleting={isDeleting}
+                    isEditing={isEditing}
                     onCommentDelete={handleDelete}
                     onCommentEdit={handleEdit}
                     onCommentReply={handleReply}
